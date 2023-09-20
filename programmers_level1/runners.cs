@@ -25,6 +25,8 @@ using System.Collections.Generic;
 
 public class Solution {
     public string[] solution(string[] players, string[] callings) {
+        // 반복적으로 호출될 경우 시간복잡도가 높아지므로 큰 배열에서 반복저긍로 호출 시 성능 문제 발생
+        /*
         List<string> answer = new List<string>(players);
         
         for(int i=0; i<callings.Length; i++)
@@ -35,5 +37,25 @@ public class Solution {
             }
         
         return answer.ToArray();
+        */
+
+        // 시간 복잡도를 고려한 효율적인 방법은 Dictionary를 사용하는 것
+        Dictionary<string, int> dict = new Dictionary<string, int>();
+
+            for (int i = 0; i < players.Length; i++)
+                dict.Add(players[i], i); // 키 값에 대한 순위
+
+            for (int i = 0; i < callings.Length; i++)
+            {
+                int num = dict[callings[i]]--; // 현재 순위 + 1
+                string str = players[num - 1]; // 추월 당하는 플레이어
+
+                players[num - 1] = players[num];
+                players[num] = str;
+
+                dict[str]++;
+            }
+
+            return players;
     }
 }
